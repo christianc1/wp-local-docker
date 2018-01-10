@@ -8,7 +8,7 @@ This project is based on [docker-compose](https://docs.docker.com/compose/). By 
 
 You can directly edit PHP, nginx, and Elasticsearch configuration files from within the repo as they are mapped to the correct locations in containers.
 
-A `Dockerfile` is included for PHP-FPM (`/dockerfiles/php-fpm/Dockerfile`). This adds a few extra things to the PHP-FPM image.
+A [custom phpfpm image](https://github.com/10up/phpfpm-image) is used for this environment that adds a few extra things to the PHP-FPM image.
 
 The `/config/elasticsearch/plugins` folder is mapped to the plugins folder in the Elasticsearch container. You can drop Elasticsearch plugins in this folder to have them installed within the container.
 
@@ -19,7 +19,7 @@ The `/config/elasticsearch/plugins` folder is mapped to the plugins folder in th
 
 ## Setup
 
-1. `git clone git@github.com:10up/wp-local-docker.git <my-project-name>`
+1. `git clone https://github.com/10up/wp-local-docker.git <my-project-name>`
 1. `cd <my-project-name>`
 1. `docker-compose up`
 1. Run setup to download WordPress and create a `wp-config.php` file.
@@ -49,7 +49,7 @@ Adding a `docker-compose.override.yml` file alongside the `docker-compose.yml` f
 the following, allows you to change the domain associated with the cluster while retaining the ability to pull in changes from the repo.
 
 ```
-version: '2'
+version: '3'
 services:
   phpfpm:
     extra_hosts:
@@ -83,6 +83,10 @@ alias dcbash='docker-compose exec --user root phpfpm bash'
 This alias lets you run `dcbash` to SSH into the PHP/WordPress container.
 
 Alternatively, there is a script in the `/bin` directory that allows you to SSH in to the environment from the project directory directly: `./bin/ssh`.
+
+## MailCatcher
+
+MailCatcher runs a simple local SMTP server which catches any message sent to it, and displays it in it's built-in web interface. All emails sent by WordPress will be intercepted by MailCatcher. To view emails in the MailCatcher web interface, navigate to `http://localhost:1080` in your web browser of choice.
 
 ## Credits
 
